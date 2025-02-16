@@ -10,11 +10,13 @@ function Card({products, loading,viewMode}) {
     {loading&&<p>Loading...</p>}
     {!loading&&products.length>0&&products.map((product, index) => (
        <div key={product.id} onClick={()=>handleClick(product.id)} className={`rounded-lg px-4 overflow-hidden shadow-lg ${viewMode === 'grid' ? 'flex flex-col ' : 'flex gap-4 p-4'} cursor-pointer hover:shadow-xl`}>
+         <div className={`${viewMode === 'grid' ? 'w-full h-45' : 'h-40 w-50 p-2.5 '}`}>
          <img
            src={product.attributes.image}
            alt="Product"
-           className={` rounded-xl  ${viewMode === 'grid' ? 'w-full h-50 object-cover' : 'h-40 w-50 '} `}
+           className={` rounded-xl object-cover ${viewMode === 'grid' ? 'w-full h-45' : 'w-full h-35'} `}
          />
+         </div>
          <div className={`p-4 text-center ${viewMode==='grid'?'':' w-full flex justify-between'}`}>
           <div>
           <h1 className='text-xl font-semibold text-gray-600'>{product.attributes.title} </h1>
