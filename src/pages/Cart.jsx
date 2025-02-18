@@ -1,13 +1,24 @@
 import React, { useContext } from "react";
 import { CartContext } from "../App";
-
+import { ToastContainer, toast } from 'react-toastify';
 const Cart = () => {
   const { cart, setCart } = useContext(CartContext);
   const handleDelete = (product) => {
-    let copied = [...cart];
-    copied = cart.filter((item) => item.id !== product.id);
-    setCart(copied);
+    let copied = cart.filter((item) => item.id !== product.id);
+    let confirmDelete = window.confirm('Are you sure you want to delete?');
+    if (confirmDelete) setCart(copied);
+    toast.success('Item deleted successfull', {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
   };
+  
 
   const handleUpdate = (current, product) => {
     let copied = [...cart];
@@ -159,6 +170,7 @@ const Cart = () => {
           </div>
         </div>
       </div>
+       <ToastContainer />
     </div>
   );
 };
