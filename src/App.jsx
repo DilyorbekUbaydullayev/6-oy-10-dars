@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
 import Products from './pages/Products'
@@ -9,11 +9,18 @@ import Cart from './pages/Cart'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Details from './pages/Details'
-
+export const CartContext = createContext()
 
 function App() {
+  const [cart, setCart]= useState([])
+
+  useEffect(()=>{
+    console.log(cart);
+    
+  },[cart])
+
   return (
-    <div>
+    <CartContext.Provider value={{cart,setCart}}>
       <Routes>
         <Route path="/" element={<MainLayout><Home></Home></MainLayout>} />
         <Route path="/about" element={<MainLayout><About></About></MainLayout>} />
@@ -24,7 +31,7 @@ function App() {
         <Route path="/register" element={<MainLayout><Register></Register></MainLayout>} />
         
       </Routes>
-    </div>
+    </CartContext.Provider>
   )
 }
 
