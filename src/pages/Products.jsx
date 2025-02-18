@@ -3,6 +3,7 @@ import {Grid, List } from 'lucide-react';
 import { http } from '../axios';
 import Card from '../components/Card';
 import { useSearchParams } from 'react-router-dom';
+import Pagination from '@mui/material/Pagination';
 
 const Products = () => {
   const [viewMode, setViewMode] = useState('grid');
@@ -17,6 +18,8 @@ const Products = () => {
     sort: 'a-z',
     shipping: false
   })
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1)
   
   useEffect(() => {
     if(searchParams.get('search')||searchParams.get('sort')||searchParams.get('company')||searchParams.get('category')||searchParams.get('price')||searchParams.get('shipping')){
@@ -30,6 +33,9 @@ const Products = () => {
           shipping: searchParams.get('shipping')=='on'?true:false
         }
       })}
+      if(searchParams.get('page')){
+        setPage(searchParams.get('page'));
+      }
   }, [searchParams])
 
   useEffect(() => {
@@ -41,6 +47,7 @@ const Products = () => {
     .then(res => {
       if(res.status==200){
         setProducts(res.data?.data)
+        setTotalPages(res.data?.meta.pagination.pageCount)
       }
     })
     .catch(err => {
@@ -50,6 +57,22 @@ const Products = () => {
       setLoading(false) 
     })
   },[filter])
+
+  useEffect(() => {
+    http.get(`/products?page=${page}`)
+    .then(res => {
+       if(res.status==200){
+         setProducts(res.data?.data)
+         setTotalPages(res.data?.meta.pagination.pageCount)
+       }
+     })
+     .catch(err => {
+       console.log(err)
+     })
+     .finally(() => {
+       setLoading(false) 
+     })
+  },[page])
 
   const handleFilter = (e) => {
     e.preventDefault()
@@ -80,6 +103,10 @@ const Products = () => {
       shipping: false
     });
   };
+  const handlePaginate = (event,target) => {
+      setPage(target)
+      setSearchParams({page:target})
+  }
 
   return (
     
@@ -183,6 +210,9 @@ const Products = () => {
       <section className="p-4">
         <Card products={products} loading={loading} viewMode={viewMode} />
       </section>
+      <div className='flex justify-end my-10'>
+      <Pagination onChange={handlePaginate} page={page} count={totalPages} variant="outlined" />
+      </div>
     </div>
   );
 };

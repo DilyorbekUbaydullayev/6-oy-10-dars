@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Moon, ShoppingCart } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { CartContext } from "../App";
 function Header() {
   const location = useLocation();
+  const {cart} = useContext(CartContext)
   return (
     <div>
       <nav className="bg-navy-900 text-gray-400 text-sm p-2 bg-[#021431]">
@@ -52,9 +54,11 @@ function Header() {
           <div className="flex items-center space-x-4">
             <Moon className="w-5 h-5 text-gray-600" />
             <div className="relative">
+              <Link to='/cart'>
               <ShoppingCart className="w-5 h-5 text-gray-600" />
+              </Link>
               <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                0
+                {cart.length}
               </span>
             </div>
           </div>
